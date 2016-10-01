@@ -6,12 +6,11 @@
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>ccd6f9ca-e338-4178-bf14-40b2d703435c</ProjectGuid>
-    <RootNamespace>robotics</RootNamespace>
+    <ProjectGuid>c41ff1db-fbd9-4014-9e34-e0d3431c372d</ProjectGuid>
+    <RootNamespace>demo-robot-simulator</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
   </PropertyGroup>
-
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
