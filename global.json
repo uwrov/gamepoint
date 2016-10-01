@@ -7,8 +7,5 @@
         "dependencies/NMockito/src",
         "dependencies/robotics/src",
         "dependencies/robotics/test"
-    ],
-    "sdk": {
-        "version": "1.0.0-preview1-002702"
-    }
+    ]
 }
