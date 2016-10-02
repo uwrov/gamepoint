@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+using Dargon.Robotics.DebugScene;
 using Dargon.Robotics.Demo.Subsystems;
 using Dargon.Robotics.DeviceRegistries;
 using Dargon.Robotics.Devices;
@@ -10,6 +12,7 @@ using MathNet.Spatial.Units;
 
 namespace Dargon.Robotics.Demo {
    public class GamePointIterativeRobotUserCode : IterativeRobotUserCode {
+      private readonly IDebugRenderContext debugRenderContext;
       private readonly IGamepad gamepad;
       private readonly HolonomicDriveTrain driveTrain;
       private readonly IGyroscope yawGyroscope;
@@ -17,7 +20,8 @@ namespace Dargon.Robotics.Demo {
       private int i = 0;
       private Vector2D destination;
 
-      public GamePointIterativeRobotUserCode(IGamepad gamepad, HolonomicDriveTrain driveTrain, Devices devices) {
+      public GamePointIterativeRobotUserCode(IDebugRenderContext debugRenderContext, IGamepad gamepad, HolonomicDriveTrain driveTrain, Devices devices) {
+         this.debugRenderContext = debugRenderContext;
          this.gamepad = gamepad;
          this.driveTrain = driveTrain;
          this.yawGyroscope = devices.YawGyroscope;
@@ -26,6 +30,22 @@ namespace Dargon.Robotics.Demo {
 
       public override void OnTick() {
          positionTracker.Update();
+
+         debugRenderContext.BeginScene();
+         debugRenderContext.AddQuad(new DebugSceneQuad {
+            Color = Color.Magenta,
+            Extents = new Vector2D(0.25, 0.25),
+            Position = positionTracker.Position,
+            Rotation = yawGyroscope.GetAngle()
+         });
+         debugRenderContext.AddQuad(new DebugSceneQuad {
+            Color = Color.Lime,
+            Extents = new Vector2D(0.25, 0.25),
+            Position = destination,
+            Rotation = 0
+         });
+         debugRenderContext.EndScene();
+
 //         Console.WriteLine(positionTracker.Position);
          if (!gamepad.LeftShoulder) {
             driveTrain.TankDrive(gamepad.LeftY, gamepad.RightY);
@@ -40,6 +60,10 @@ namespace Dargon.Robotics.Demo {
          {
             if (gamepad.RightShoulder) {
                destination = positionTracker.Position + new Vector2D(1, 2).Rotate(Angle.FromRadians(yawGyroscope.GetAngle()));
+            }
+
+            if (gamepad.Start) {
+               destination = positionTracker.Position + new Vector2D(5, 2).Rotate(Angle.FromRadians(yawGyroscope.GetAngle()));
             }
 
             var desiredLookat = (destination - positionTracker.Position).Rotate(Angle.FromRadians(-yawGyroscope.GetAngle()));
@@ -58,7 +82,14 @@ namespace Dargon.Robotics.Demo {
 
             var speed = 1.0f;
             if (gamepad.LeftShoulder) {
-               driveTrain.TankDrive((float)(speed / finalRatio), (float)(speed * finalRatio));
+               var left = (float)(speed / finalRatio);
+               var right = (float)(speed * finalRatio);
+               var max = Math.Max(left, right);
+               if (max >1.0) {
+                  left /= max;
+                  right /= max;
+               }
+               driveTrain.TankDrive(left, right);
             }
 
 //            Console.WriteLine(positionTracker.Position + " " + yawGyroscope.GetAngle() + " " + desiredLookatNorm + " " + currentLookatNorm + " " + ratioChange + " " + (speed / finalRatio) + " " + (speed * finalRatio));

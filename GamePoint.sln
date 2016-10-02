@@ -42,6 +42,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "gamepoint", "src\gamepoint\
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "gamepoint-simulator", "src\gamepoint-simulator\gamepoint-simulator.xproj", "{C41FF1DB-FBD9-4014-9E34-E0D3431C372D}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Dargon.Robotics.DebugScene.Api", "dependencies\robotics\src\Dargon.Robotics.DebugScene.Api\Dargon.Robotics.DebugScene.Api.xproj", "{FFC89150-31F7-4C32-A02C-1A0A1CC17166}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -104,6 +106,10 @@ Global
 		{C41FF1DB-FBD9-4014-9E34-E0D3431C372D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C41FF1DB-FBD9-4014-9E34-E0D3431C372D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C41FF1DB-FBD9-4014-9E34-E0D3431C372D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFC89150-31F7-4C32-A02C-1A0A1CC17166}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFC89150-31F7-4C32-A02C-1A0A1CC17166}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFC89150-31F7-4C32-A02C-1A0A1CC17166}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFC89150-31F7-4C32-A02C-1A0A1CC17166}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -122,5 +128,6 @@ Global
 		{7A583A0F-6154-47D5-9D6E-D91E94A0C4FB} = {6B4B4214-7CE4-470D-8E43-C42043277C3D}
 		{15B18E84-4AF1-44AE-A3B8-7F42AF385484} = {2FC00538-7102-45C1-B58F-E64E3772F18E}
 		{C41FF1DB-FBD9-4014-9E34-E0D3431C372D} = {2FC00538-7102-45C1-B58F-E64E3772F18E}
+		{FFC89150-31F7-4C32-A02C-1A0A1CC17166} = {2FC00538-7102-45C1-B58F-E64E3772F18E}
 	EndGlobalSection
 EndGlobal

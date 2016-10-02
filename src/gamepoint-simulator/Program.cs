@@ -2,6 +2,7 @@
 using System.Threading;
 using Dargon.Commons;
 using Dargon.Robotics;
+using Dargon.Robotics.DebugScene;
 using Dargon.Robotics.DeviceRegistries;
 using Dargon.Robotics.Devices;
 using Dargon.Robotics.Simulations2D;
@@ -22,21 +23,6 @@ namespace demo_robot_simulator {
 
       public static void Main(string[] args) {
          // create simulation state
-//<<<<<<< HEAD
-//         var constants = SimulationConstantsFactory.LandRobot();
-//         var motors = SimulationMotorStateFactory.SkidDrive(constants.WidthMeters, constants.HeightMeters, kWheelForce);
-////         var motors = SimulationMotorStateFactory.HybridDrive(constants.Width, constants.Height, kMecanumWheelForceAngle, kWheelForce);
-//         var wheelShaftEncoders = SimulationWheelShaftEncoderStateFactory.FromMotors(motors, kWheelRadius, 128);
-//         var yawGyro = new SimulationGyroscopeState("Drive.Gyroscopes.Yaw");
-//         var robot = new SimulationRobotState(constants.WidthMeters, constants.HeightMeters, constants.Density, motors, wheelShaftEncoders, yawGyro);
-//=======
-//         var constants = SimulationConstantsFactory.WideLandRobot();
-//         var motors = SimulationMotorStateFactory.HybridDrive(constants.WidthMeters, constants.HeightMeters, kMecanumWheelForceAngle, kWheelForce);
-//         var wheelEncoders = SimulationWheelEncoderStateFactory.FromMotors(motors);
-//         var accelerometer = new SimulationAccelerometerState();
-//         var robot = new SimulationRobotState(constants.WidthMeters, constants.HeightMeters, constants.Density, motors, wheelEncoders, accelerometer);
-//>>>>>>> origin/ master
-
          var constants = SimulationConstantsFactory.WideLandRobot();
          var motors = SimulationMotorStateFactory.SkidDrive(constants.WidthMeters, constants.HeightMeters, kWheelForce);
          var wheelShaftEncoders = SimulationWheelShaftEncoderStateFactory.FromMotors(motors, kWheelRadius, 128);
@@ -44,7 +30,7 @@ namespace demo_robot_simulator {
          var robot = new SimulationRobotState(constants.WidthMeters, constants.HeightMeters, constants.Density, motors, wheelShaftEncoders, yawGyro);
 
 //         var robotEntity = new SimulationRobotEntity(constants, robot, new Vector2(0, robot.Height / 4));
-         var robotEntity = new SimulationRobotEntity(constants, robot, new Vector2(-robot.Width / 32, robot.Height / 4));
+         var robotEntity = new SimulationRobotEntity(constants, robot, new Vector2(-robot.Width / 64, robot.Height / 4));
 
          // create robot state
          var deviceRegistry = new DefaultDeviceRegistry();
@@ -62,19 +48,23 @@ namespace demo_robot_simulator {
 
          deviceRegistry.AddDevice(yawGyro.Name, new SimulationGyroscopeAdapter(yawGyro));
 
+         // Debugscene Stuff
+         var debugRenderContext = new DebugRenderContext();
+
          // start robot code in new thread
          new Thread(() => {
             var ryuConfiguration = new RyuConfiguration();
             ryuConfiguration.AdditionalModules.Add(new RyuModule().With(m => {
                m.Required.Singleton<KeyboardGamepad>().Implements<IGamepad>();
                m.Required.Singleton<IDeviceRegistry>(x => deviceRegistry);
+               m.Required.Singleton<IDebugRenderContext>(x => debugRenderContext);
             }));
 
             var ryu = new RyuFactory().Create(ryuConfiguration);
             ryu.GetOrActivate<IRobot>().Run();
          }).Start();
 
-         new Simulation2D(robotEntity).Run();
+         new Simulation2D(robotEntity, debugRenderContext).Run();
       }
    }
 }

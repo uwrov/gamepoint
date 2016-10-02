@@ -97,6 +97,28 @@
           "net461/Dargon.Robotics.dll": {}
         }
       },
+      "Dargon.Robotics.DebugScene.Api/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.6.1",
+        "dependencies": {
+          "Dargon.Commons": "1.0.0",
+          "Dargon.Ryu.Api": "1.0.0",
+          "Dargon.Ryu.Impl": "1.0.0",
+          "MathNet.Numerics": "3.13.1",
+          "MathNet.Spatial": "0.2.0-alpha",
+          "NLog": "4.3.9"
+        },
+        "frameworkAssemblies": [
+          "System.Drawing",
+          "System.Xml"
+        ],
+        "compile": {
+          "net461/Dargon.Robotics.DebugScene.Api.dll": {}
+        },
+        "runtime": {
+          "net461/Dargon.Robotics.DebugScene.Api.dll": {}
+        }
+      },
       "Dargon.Ryu.Api/0.0.0": {
         "type": "project",
         "framework": ".NETFramework,Version=v4.6.1",
@@ -259,6 +281,11 @@
       "path": "../../dependencies/robotics/src/Dargon.Robotics/project.json",
       "msbuildProject": "../../dependencies/robotics/src/Dargon.Robotics/Dargon.Robotics.xproj"
     },
+    "Dargon.Robotics.DebugScene.Api/1.0.0": {
+      "type": "project",
+      "path": "../../dependencies/robotics/src/Dargon.Robotics.DebugScene.Api/project.json",
+      "msbuildProject": "../../dependencies/robotics/src/Dargon.Robotics.DebugScene.Api/Dargon.Robotics.DebugScene.Api.xproj"
+    },
     "Dargon.Ryu.Api/0.0.0": {
       "type": "project",
       "path": "../../dependencies/ryu/src/Dargon.Ryu.Api/project.json",
@@ -273,6 +300,7 @@
   "projectFileDependencyGroups": {
     "": [
       "Dargon.Robotics",
+      "Dargon.Robotics.DebugScene.Api",
       "Dargon.Ryu.Api"
     ],
     ".NETFramework,Version=v4.6.1": [

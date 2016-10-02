@@ -2,6 +2,7 @@
 using System.Threading;
 using Dargon.Commons;
 using Dargon.Robotics;
+using Dargon.Robotics.DebugScene;
 using Dargon.Robotics.DeviceRegistries;
 using Dargon.Robotics.Devices;
 using Dargon.Robotics.Simulations2D;
@@ -22,19 +23,10 @@ namespace demo_robot_simulator {
       public static void Main(string[] args) {
          // create simulation state
          var constants = SimulationConstantsFactory.WaterRobot();
-//         var motors = SimulationMotorStateFactory.SkidDrive(constants.Width, constants.Height, kWheelForce);
-//         var motors = SimulationMotorStateFactory.MecanumDrive(constants.Width, constants.Height, kMecanumWheelForceAngle, kWheelForce);
-<<<<<<< HEAD
-         var motors = SimulationMotorStateFactory.RovDrive(constants.Width, constants.Height, kMecanumWheelForceAngle, kWheelForce);
-         var wheelEncoders = SimulationWheelShaftEncoderStateFactory.FromMotors(motors);
-         var accelerometer = new SimulationGyroscopeState();
-         var robot = new SimulationRobotState(constants.Width, constants.Height, constants.Density, motors, wheelEncoders, accelerometer);
-=======
          var motors = SimulationMotorStateFactory.RovDrive(constants.WidthMeters, constants.HeightMeters, kMecanumWheelForceAngle, kWheelForce);
-         var wheelEncoders = SimulationWheelEncoderStateFactory.FromMotors(motors);
-         var accelerometer = new SimulationAccelerometerState();
-         var robot = new SimulationRobotState(constants.WidthMeters, constants.HeightMeters, constants.Density, motors, wheelEncoders, accelerometer);
->>>>>>> origin/master
+         var wheelEncoders = SimulationWheelShaftEncoderStateFactory.FromMotors(motors, kWheelRadius, 128);
+         var yawGyro = new SimulationGyroscopeState("Drive.Gyros.Yaw");
+         var robot = new SimulationRobotState(constants.WidthMeters, constants.HeightMeters, constants.Density, motors, wheelEncoders, yawGyro);
          var robotEntity = new SimulationRobotEntity(constants, robot);
 
          // create robot state
@@ -51,12 +43,16 @@ namespace demo_robot_simulator {
          deviceRegistry.AddDevice("Arm.Servos.Elbow", new NullServo("Arm.Servos.Elbow"));
          deviceRegistry.AddDevice("Arm.Servos.InOut", new NullServo("Arm.Servos.InOut"));
 
+         // Debugscene Stuff
+         var debugRenderContext = new DebugRenderContext();
+
          // start robot code in new thread
          new Thread(() => {
             var ryuConfiguration = new RyuConfiguration();
             ryuConfiguration.AdditionalModules.Add(new RyuModule().With(m => {
                m.Required.Singleton<KeyboardGamepad>().Implements<IGamepad>();
                m.Required.Singleton<IDeviceRegistry>(x => deviceRegistry);
+               m.Required.Singleton<IDebugRenderContext>(x => debugRenderContext);
             }));
 
             var ryu = new RyuFactory().Create(ryuConfiguration);
