@@ -38,7 +38,7 @@ namespace Dargon.Robotics.Demo {
          deviceRegistry.AddDevice(positionTracker.Name, positionTracker);
 
          var driveTrain = new HolonomicDriveTrain(frontLeftMotor, frontRightMotor, rearLeftMotor, rearRightMotor);
-         return new Devices(driveTrain, positionTracker);
+         return new Devices(driveTrain, yawGyro, positionTracker);
       }
    }
 }

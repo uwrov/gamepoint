@@ -24,10 +24,17 @@ namespace demo_robot_simulator {
          var constants = SimulationConstantsFactory.WaterRobot();
 //         var motors = SimulationMotorStateFactory.SkidDrive(constants.Width, constants.Height, kWheelForce);
 //         var motors = SimulationMotorStateFactory.MecanumDrive(constants.Width, constants.Height, kMecanumWheelForceAngle, kWheelForce);
+<<<<<<< HEAD
          var motors = SimulationMotorStateFactory.RovDrive(constants.Width, constants.Height, kMecanumWheelForceAngle, kWheelForce);
          var wheelEncoders = SimulationWheelShaftEncoderStateFactory.FromMotors(motors);
          var accelerometer = new SimulationGyroscopeState();
          var robot = new SimulationRobotState(constants.Width, constants.Height, constants.Density, motors, wheelEncoders, accelerometer);
+=======
+         var motors = SimulationMotorStateFactory.RovDrive(constants.WidthMeters, constants.HeightMeters, kMecanumWheelForceAngle, kWheelForce);
+         var wheelEncoders = SimulationWheelEncoderStateFactory.FromMotors(motors);
+         var accelerometer = new SimulationAccelerometerState();
+         var robot = new SimulationRobotState(constants.WidthMeters, constants.HeightMeters, constants.Density, motors, wheelEncoders, accelerometer);
+>>>>>>> origin/master
          var robotEntity = new SimulationRobotEntity(constants, robot);
 
          // create robot state

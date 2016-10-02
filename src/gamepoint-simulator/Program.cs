@@ -22,13 +22,29 @@ namespace demo_robot_simulator {
 
       public static void Main(string[] args) {
          // create simulation state
-         var constants = SimulationConstantsFactory.LandRobot();
+//<<<<<<< HEAD
+//         var constants = SimulationConstantsFactory.LandRobot();
+//         var motors = SimulationMotorStateFactory.SkidDrive(constants.WidthMeters, constants.HeightMeters, kWheelForce);
+////         var motors = SimulationMotorStateFactory.HybridDrive(constants.Width, constants.Height, kMecanumWheelForceAngle, kWheelForce);
+//         var wheelShaftEncoders = SimulationWheelShaftEncoderStateFactory.FromMotors(motors, kWheelRadius, 128);
+//         var yawGyro = new SimulationGyroscopeState("Drive.Gyroscopes.Yaw");
+//         var robot = new SimulationRobotState(constants.WidthMeters, constants.HeightMeters, constants.Density, motors, wheelShaftEncoders, yawGyro);
+//=======
+//         var constants = SimulationConstantsFactory.WideLandRobot();
+//         var motors = SimulationMotorStateFactory.HybridDrive(constants.WidthMeters, constants.HeightMeters, kMecanumWheelForceAngle, kWheelForce);
+//         var wheelEncoders = SimulationWheelEncoderStateFactory.FromMotors(motors);
+//         var accelerometer = new SimulationAccelerometerState();
+//         var robot = new SimulationRobotState(constants.WidthMeters, constants.HeightMeters, constants.Density, motors, wheelEncoders, accelerometer);
+//>>>>>>> origin/ master
+
+         var constants = SimulationConstantsFactory.WideLandRobot();
          var motors = SimulationMotorStateFactory.SkidDrive(constants.WidthMeters, constants.HeightMeters, kWheelForce);
-//         var motors = SimulationMotorStateFactory.HybridDrive(constants.Width, constants.Height, kMecanumWheelForceAngle, kWheelForce);
          var wheelShaftEncoders = SimulationWheelShaftEncoderStateFactory.FromMotors(motors, kWheelRadius, 128);
          var yawGyro = new SimulationGyroscopeState("Drive.Gyroscopes.Yaw");
          var robot = new SimulationRobotState(constants.WidthMeters, constants.HeightMeters, constants.Density, motors, wheelShaftEncoders, yawGyro);
-         var robotEntity = new SimulationRobotEntity(constants, robot, new Vector2(0, robot.Height / 4));
+
+//         var robotEntity = new SimulationRobotEntity(constants, robot, new Vector2(0, robot.Height / 4));
+         var robotEntity = new SimulationRobotEntity(constants, robot, new Vector2(-robot.Width / 32, robot.Height / 4));
 
          // create robot state
          var deviceRegistry = new DefaultDeviceRegistry();
