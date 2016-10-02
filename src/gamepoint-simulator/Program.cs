@@ -15,18 +15,19 @@ namespace demo_robot_simulator {
       private const float kMecanumWheelForceAngle = (float)(Math.PI / 4);
       private const float kMecanumWheelForceMagnitude = 50 * 1000.0f;
       private const float kNewtonMetersPerOzInch = 0.00706155183333f;
-      private const float kMotorTorque = 2.42f; //50 * kNewtonMetersPerOzInch;
+      private const float kMotorTorque = 12.42f; //50 * kNewtonMetersPerOzInch;
       private const float kMetersPerInch = 0.0254f;
-      private const float kWheelRadius = 2 * kMetersPerInch;
+      private const float kWheelRadius = 5 * kMetersPerInch;
       private const float kWheelForce = kMotorTorque / kWheelRadius;
 
       public static void Main(string[] args) {
          // create simulation state
          var constants = SimulationConstantsFactory.LandRobot();
-         var motors = SimulationMotorStateFactory.HybridDrive(constants.Width, constants.Height, kMecanumWheelForceAngle, kWheelForce);
-         var wheelEncoders = SimulationWheelEncoderStateFactory.FromMotors(motors);
-         var accelerometer = new SimulationAccelerometerState();
-         var robot = new SimulationRobotState(constants.Width, constants.Height, constants.Density, motors, wheelEncoders, accelerometer);
+         var motors = SimulationMotorStateFactory.SkidDrive(constants.WidthMeters, constants.HeightMeters, kWheelForce);
+//         var motors = SimulationMotorStateFactory.HybridDrive(constants.Width, constants.Height, kMecanumWheelForceAngle, kWheelForce);
+         var wheelShaftEncoders = SimulationWheelShaftEncoderStateFactory.FromMotors(motors, kWheelRadius, 128);
+         var yawGyro = new SimulationGyroscopeState("Drive.Gyroscopes.Yaw");
+         var robot = new SimulationRobotState(constants.WidthMeters, constants.HeightMeters, constants.Density, motors, wheelShaftEncoders, yawGyro);
          var robotEntity = new SimulationRobotEntity(constants, robot, new Vector2(0, robot.Height / 4));
 
          // create robot state
@@ -37,6 +38,13 @@ namespace demo_robot_simulator {
             deviceRegistry.AddDevice(motor.Name, motor);
             motor.Set(0.1f);
          }
+
+         foreach (var simulationWheelShaftEncoderState in wheelShaftEncoders) {
+            var encoder = new SimulationIncrementalRotaryEncoderAdapter(simulationWheelShaftEncoderState, 128);
+            deviceRegistry.AddDevice(encoder.Name, encoder);
+         }
+
+         deviceRegistry.AddDevice(yawGyro.Name, new SimulationGyroscopeAdapter(yawGyro));
 
          // start robot code in new thread
          new Thread(() => {
