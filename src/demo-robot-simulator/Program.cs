@@ -59,7 +59,7 @@ namespace demo_robot_simulator {
             ryu.GetOrActivate<IRobot>().Run();
          }).Start();
 
-         new Simulation2D(robotEntity).Run();
+         new Simulation2D(robotEntity, debugRenderContext).Run();
       }
    }
 }
