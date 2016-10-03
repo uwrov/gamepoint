@@ -33,7 +33,7 @@ namespace Dargon.Robotics.Demo {
          var frontRightIncrementalRotaryEncoder = deviceRegistry.GetDevice<IIncrementalRotaryEncoder>("Drive.Motors.FrontRight.Encoder");
          var yawGyro = deviceRegistry.GetDevice<IGyroscope>("Drive.Gyroscopes.Yaw");
 
-         var positionTracker = new TankDriveShaftEncodersAndYawGyroscopeBasedPositionTracker("Drive.PositionTracker", yawGyro, frontLeftIncrementalRotaryEncoder, frontLeftIncrementalRotaryEncoder, 5.0f * 0.0254f);
+         var positionTracker = new TankDriveShaftEncodersAndYawGyroscopeBasedPositionTracker("Drive.PositionTracker", yawGyro, frontLeftIncrementalRotaryEncoder, frontRightIncrementalRotaryEncoder, 5.0f * 0.0254f);
          positionTracker.Initialize();
          deviceRegistry.AddDevice(positionTracker.Name, positionTracker);
 

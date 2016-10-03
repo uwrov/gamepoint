@@ -24,13 +24,15 @@ namespace demo_robot_simulator {
       public static void Main(string[] args) {
          // create simulation state
          var constants = SimulationConstantsFactory.WideLandRobot();
-         var motors = SimulationMotorStateFactory.SkidDrive(constants.WidthMeters, constants.HeightMeters, kWheelForce);
+//         var motors = SimulationMotorStateFactory.SkidDrive(constants.WidthMeters, constants.HeightMeters, kWheelForce);
+         var motors = SimulationMotorStateFactory.HybridDrive(constants.WidthMeters, constants.HeightMeters, kMecanumWheelForceAngle, kWheelForce);
          var wheelShaftEncoders = SimulationWheelShaftEncoderStateFactory.FromMotors(motors, kWheelRadius, 128);
          var yawGyro = new SimulationGyroscopeState("Drive.Gyroscopes.Yaw");
          var robot = new SimulationRobotState(constants.WidthMeters, constants.HeightMeters, constants.Density, motors, wheelShaftEncoders, yawGyro);
 
 //         var robotEntity = new SimulationRobotEntity(constants, robot, new Vector2(0, robot.Height / 4));
-         var robotEntity = new SimulationRobotEntity(constants, robot, new Vector2(-robot.Width / 64, robot.Height / 4));
+         var robotEntity = new SimulationRobotEntity(constants, robot, new Vector2(-robot.Width / 64, robot.Height / 4), true);
+//         var robotEntity = new SimulationRobotEntity(constants, robot, new Vector2(0, robot.Height / 4), true);
 
          // create robot state
          var deviceRegistry = new DefaultDeviceRegistry();
