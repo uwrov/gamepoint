@@ -1,6 +1,8 @@
-﻿using Dargon.Robotics.Demo.Subsystems;
+﻿using System;
+using Dargon.Robotics.Demo.Subsystems;
 using Dargon.Robotics.DeviceRegistries;
 using Dargon.Robotics.Devices;
+using Dargon.Robotics.RollbackLogs;
 using Dargon.Robotics.Subsystems.DriveTrain.Holonomic;
 using Dargon.Robotics.Subsystems.DriveTrain.Vertical;
 using Dargon.Ryu;
@@ -37,8 +39,9 @@ namespace Dargon.Robotics.Demo {
          positionTracker.Initialize();
          deviceRegistry.AddDevice(positionTracker.Name, positionTracker);
 
+         var motionLog = new MotionStateSnapshotLog(positionTracker, yawGyro, TimeSpan.FromSeconds(2));
          var driveTrain = new HolonomicDriveTrain(frontLeftMotor, frontRightMotor, rearLeftMotor, rearRightMotor);
-         return new Devices(driveTrain, yawGyro, positionTracker);
+         return new Devices(driveTrain, yawGyro, positionTracker, motionLog);
       }
    }
 }

@@ -4,6 +4,7 @@ using Dargon.Robotics.DebugScene;
 using Dargon.Robotics.Demo.Subsystems;
 using Dargon.Robotics.DeviceRegistries;
 using Dargon.Robotics.Devices;
+using Dargon.Robotics.RollbackLogs;
 using Dargon.Robotics.Subsystems.DriveTrain.Holonomic;
 using Dargon.Robotics.Subsystems.DriveTrain.Vertical;
 using MathNet.Spatial.Euclidean;
@@ -17,6 +18,7 @@ namespace Dargon.Robotics.Demo {
       private readonly HolonomicDriveTrain driveTrain;
       private readonly IGyroscope yawGyroscope;
       private readonly IPositionTracker positionTracker;
+      private readonly IMotionStateSnapshotLog motionLog;
       private int i = 0;
       private Vector2D destination;
 
@@ -26,10 +28,12 @@ namespace Dargon.Robotics.Demo {
          this.driveTrain = driveTrain;
          this.yawGyroscope = devices.YawGyroscope;
          this.positionTracker = devices.PositionTracker;
+         this.motionLog = devices.MotionLog;
       }
 
       public override void OnTick() {
          positionTracker.Update();
+         motionLog.Update();
 
          debugRenderContext.BeginScene();
          debugRenderContext.AddQuad(new DebugSceneQuad {
@@ -44,6 +48,20 @@ namespace Dargon.Robotics.Demo {
             Position = destination,
             Rotation = 0
          });
+         var lastSnapshotTime = DateTime.Now;
+         foreach (var entry in motionLog.EnumerateSnapshotEntries()) {
+            if (Math.Abs((lastSnapshotTime - entry.Timestamp).TotalSeconds) > 0.3) {
+               lastSnapshotTime = entry.Timestamp;
+               debugRenderContext.AddQuad(new DebugSceneQuad {
+                  Color = Color.LightCoral,
+                  Extents = new Vector2D(0.10, 0.10),
+                  Position = entry.Snapshot.Position,
+                  Rotation = entry.Snapshot.Yaw
+               });
+            } else {
+               continue;
+            }
+         }
          debugRenderContext.EndScene();
 
 //         Console.WriteLine(positionTracker.Position);
