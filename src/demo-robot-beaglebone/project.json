@@ -19,8 +19,6 @@
         "Dargon.Ryu.Api": "*",
         "Dargon.Ryu.Impl": "*",
         "demo-robot": "*",
-        "Fody": "1.29.3",
-        "NLombok.Fody": "0.0.5",
         "NLog": "4.3.8"
     },
 
