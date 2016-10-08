@@ -25,7 +25,8 @@ namespace demo_robot_simulator {
          // create simulation state
          var constants = SimulationConstantsFactory.WideLandRobot();
 //         var motors = SimulationMotorStateFactory.SkidDrive(constants.WidthMeters, constants.HeightMeters, kWheelForce);
-         var motors = SimulationMotorStateFactory.HybridDrive(constants.WidthMeters, constants.HeightMeters, kMecanumWheelForceAngle, kWheelForce);
+//         var motors = SimulationMotorStateFactory.HybridDrive(constants.WidthMeters, constants.HeightMeters, kMecanumWheelForceAngle, kWheelForce);
+         var motors = SimulationMotorStateFactory.TankDrive(constants.WidthMeters, kWheelForce);
          var wheelShaftEncoders = SimulationWheelShaftEncoderStateFactory.FromMotors(motors, kWheelRadius, 128);
          var yawGyro = new SimulationGyroscopeState("Drive.Gyroscopes.Yaw");
          var robot = new SimulationRobotState(constants.WidthMeters, constants.HeightMeters, constants.Density, motors, wheelShaftEncoders, yawGyro);

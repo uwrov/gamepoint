@@ -3,12 +3,14 @@ using Dargon.Robotics.GamePoint.Subsystems;
 using Dargon.Robotics.Subsystems.DriveTrain.Holonomic;
 using Dargon.Ryu.Attributes;
 using System;
+using Dargon.Robotics.Subsystems.DriveTrain.Tank;
 
 namespace Dargon.Robotics.GamePoint.Commands {
    [InjectRequiredFields]
    public class TankDriveCommand : ICommand {
       private readonly IGamepad gamepad;
-      private readonly HolonomicDriveTrain driveTrain;
+      //private readonly HolonomicDriveTrain driveTrain;
+      private readonly TankDriveTrain driveTrain;
 
       public bool IsExecutable => true;
       public bool IsPassive => true;
@@ -18,10 +20,11 @@ namespace Dargon.Robotics.GamePoint.Commands {
       public void Start() { }
 
       public CommandStatus RunIteration() {
-         driveTrain.TankDrive(gamepad.LeftY, gamepad.RightY, true);
+         //driveTrain.TankDrive(gamepad.LeftY, gamepad.RightY, true);
+         driveTrain.SetValues(gamepad.LeftY, gamepad.RightY);
          return CommandStatus.Continue;
       }
 
-      public void Cancel() => driveTrain.Halt();
+      public void Cancel() => driveTrain.SetValues(0.0f, 0.0f);
    }
 }

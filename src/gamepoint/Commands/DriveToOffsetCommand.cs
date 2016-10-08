@@ -3,6 +3,7 @@ using Dargon.Robotics.GamePoint.Subsystems;
 using Dargon.Robotics.Subsystems.DriveTrain.Holonomic;
 using Dargon.Ryu.Attributes;
 using System;
+using Dargon.Robotics.Subsystems.DriveTrain.Tank;
 using MathNet.Spatial.Euclidean;
 using MathNet.Spatial.Units;
 
@@ -10,7 +11,8 @@ namespace Dargon.Robotics.GamePoint.Commands {
    [InjectRequiredFields]
    public class DriveToOffsetCommand : ICommand {
       private readonly IGamepad gamepad;
-      private readonly HolonomicDriveTrain driveTrain;
+      //private readonly HolonomicDriveTrain driveTrain;
+      private readonly TankDriveTrain driveTrain;
       private readonly IGyroscope yawGyroscope;
       private readonly IPositionTracker positionTracker;
       private Vector2D destination;
@@ -51,11 +53,11 @@ namespace Dargon.Robotics.GamePoint.Commands {
                left /= max;
                right /= max;
             }
-            driveTrain.TankDrive(left, right);
+            driveTrain.SetValues(left, right);
          }
          return CommandStatus.Continue;
       }
 
-      public void Cancel() => driveTrain.Halt();
+      public void Cancel() => driveTrain.SetValues(0.0f, 0.0f);
    }
 }
