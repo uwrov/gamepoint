@@ -18,3 +18,7 @@
 	path = dependencies/courier
 	url = ssh://git@github.com/the-dargon-project/courier.git
 	branch = master
+[submodule "dependencies/FodyDnx"]
+	path = dependencies/FodyDnx
+	url = ssh://git@github.com/the-dargon-project/FodyDnx.git
+	branch = master

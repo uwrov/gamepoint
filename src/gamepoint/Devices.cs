@@ -2,7 +2,7 @@
 using Dargon.Robotics.RollbackLogs;
 using Dargon.Robotics.Subsystems.DriveTrain.Holonomic;
 
-namespace Dargon.Robotics.Demo {
+namespace Dargon.Robotics.GamePoint {
    public class Devices {
       public Devices(HolonomicDriveTrain driveTrain, IGyroscope yawGyroscope, IPositionTracker positionTracker, IMotionStateSnapshotLog motionLog) {
          DriveTrain = driveTrain;

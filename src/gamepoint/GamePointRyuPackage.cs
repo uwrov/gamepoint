@@ -1,30 +1,34 @@
-﻿using System;
-using Dargon.Robotics.Demo.Subsystems;
-using Dargon.Robotics.DeviceRegistries;
+﻿using Dargon.Robotics.DeviceRegistries;
 using Dargon.Robotics.Devices;
 using Dargon.Robotics.RollbackLogs;
 using Dargon.Robotics.Subsystems.DriveTrain.Holonomic;
-using Dargon.Robotics.Subsystems.DriveTrain.Vertical;
 using Dargon.Ryu;
 using Dargon.Ryu.Modules;
+using System;
+using System.Collections.Generic;
+using Dargon.Robotics.GamePoint.Commands;
 
-namespace Dargon.Robotics.Demo {
+namespace Dargon.Robotics.GamePoint {
    public class GamePointRyuPackage : RyuModule {
       public GamePointRyuPackage() {
-         Optional.Singleton<IterativeRobot>().Implements<IRobot>();
-         Optional.Singleton<IterativeRobotConfiguration>(ConstructIterativeRobotConfiguration);
-         Optional.Singleton<GamePointIterativeRobotUserCode>().Implements<IterativeRobotUserCode>();
-
-         Optional.Singleton<Devices>(ConstructDevices);
-         Optional.Singleton<HolonomicDriveTrain>(ryu => ryu.GetOrActivate<Devices>().DriveTrain);
-         Optional.Singleton<IPositionTracker>(ryu => ryu.GetOrActivate<Devices>().PositionTracker);
+         Optional.Singleton<IRobot>(CreateRobot);
+         Optional.Singleton<GamePoint.Devices>(ConstructDevices);
+         Optional.Singleton<HolonomicDriveTrain>(ryu => ryu.GetOrActivate<GamePoint.Devices>().DriveTrain);
+         Optional.Singleton<IPositionTracker>(ryu => ryu.GetOrActivate<GamePoint.Devices>().PositionTracker);
+         Optional.Singleton<IGyroscope>(ryu => ryu.GetOrActivate<GamePoint.Devices>().YawGyroscope);
       }
 
-      private IterativeRobotConfiguration ConstructIterativeRobotConfiguration(IRyuContainer ryu) {
-         return new IterativeRobotConfiguration(100);
+      private IRobot CreateRobot(IRyuContainer ryu) {
+         var configuration = new IterativeRobotConfiguration(100);
+         var subsystems = new Dictionary<int, ISubsystem>();
+         var commands = new ICommand[] {
+            ryu.GetOrActivate<TankDriveCommand>(),
+            ryu.GetOrActivate<DriveToOffsetCommand>()
+         };
+         return SubsystemCommandBasedIterativeRobot.Create(configuration, subsystems, commands);
       }
 
-      private Devices ConstructDevices(IRyuContainer ryu) {
+      private GamePoint.Devices ConstructDevices(IRyuContainer ryu) {
          var deviceRegistry = ryu.GetOrActivate<IDeviceRegistry>();
          var frontLeftMotor = deviceRegistry.GetDevice<IMotor>("Drive.Motors.FrontLeft");
          var frontRightMotor = deviceRegistry.GetDevice<IMotor>("Drive.Motors.FrontRight");
@@ -41,7 +45,7 @@ namespace Dargon.Robotics.Demo {
 
          var motionLog = new MotionStateSnapshotLog(positionTracker, yawGyro, TimeSpan.FromSeconds(2));
          var driveTrain = new HolonomicDriveTrain(frontLeftMotor, frontRightMotor, rearLeftMotor, rearRightMotor);
-         return new Devices(driveTrain, yawGyro, positionTracker, motionLog);
+         return new GamePoint.Devices(driveTrain, yawGyro, positionTracker, motionLog);
       }
    }
 }

@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Drawing;
 using Dargon.Robotics.DebugScene;
-using Dargon.Robotics.Demo.Subsystems;
-using Dargon.Robotics.DeviceRegistries;
 using Dargon.Robotics.Devices;
 using Dargon.Robotics.RollbackLogs;
 using Dargon.Robotics.Subsystems.DriveTrain.Holonomic;
-using Dargon.Robotics.Subsystems.DriveTrain.Vertical;
 using MathNet.Spatial.Euclidean;
 using MathNet.Spatial.Units;
 
-
-namespace Dargon.Robotics.Demo {
+namespace Dargon.Robotics.GamePoint {
    public class GamePointIterativeRobotUserCode : IterativeRobotUserCode {
       private readonly IDebugRenderContext debugRenderContext;
       private readonly IGamepad gamepad;
@@ -22,7 +18,7 @@ namespace Dargon.Robotics.Demo {
       private int i = 0;
       private Vector2D destination;
 
-      public GamePointIterativeRobotUserCode(IDebugRenderContext debugRenderContext, IGamepad gamepad, HolonomicDriveTrain driveTrain, Devices devices) {
+      public GamePointIterativeRobotUserCode(IDebugRenderContext debugRenderContext, IGamepad gamepad, HolonomicDriveTrain driveTrain, GamePoint.Devices devices) {
          this.debugRenderContext = debugRenderContext;
          this.gamepad = gamepad;
          this.driveTrain = driveTrain;
