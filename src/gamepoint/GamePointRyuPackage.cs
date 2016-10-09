@@ -6,7 +6,7 @@ using Dargon.Ryu;
 using Dargon.Ryu.Modules;
 using System;
 using System.Collections.Generic;
-using Dargon.Robotics.Debug;
+using Dargon.Robotics.Debugging;
 using Dargon.Robotics.GamePoint.Commands;
 
 namespace Dargon.Robotics.GamePoint {
@@ -24,7 +24,8 @@ namespace Dargon.Robotics.GamePoint {
          var subsystems = new Dictionary<int, ISubsystem>();
          var commands = new ICommand[] {
             ryu.GetOrActivate<TankDriveCommand>(),
-            ryu.GetOrActivate<DriveToOffsetCommand>()
+            ryu.GetOrActivate<DriveToOffsetCommand>(),
+            ryu.GetOrActivate<Rotate90Command>()
          };
          var debugRenderContext = ryu.GetOrActivate<IDebugRenderContext>();
          return SubsystemCommandBasedIterativeRobot.Create(configuration, subsystems, commands, debugRenderContext);
