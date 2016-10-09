@@ -1,6 +1,6 @@
 ﻿using Dargon.Robotics.Demo.Subsystems;
-using Dargon.Robotics.Subsystems.DriveTrain.Holonomic;
-using Dargon.Robotics.Subsystems.DriveTrain.Vertical;
+using Dargon.Robotics.Devices.DriveTrain.Holonomic;
+using Dargon.Robotics.Devices.DriveTrain.Vertical;
 
 namespace Dargon.Robotics.Demo {
    public class Devices {

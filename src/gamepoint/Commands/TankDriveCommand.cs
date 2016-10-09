@@ -1,8 +1,8 @@
 ﻿using Dargon.Robotics.Devices;
 using Dargon.Robotics.GamePoint.Subsystems;
-using Dargon.Robotics.Subsystems.DriveTrain.Holonomic;
 using Dargon.Ryu.Attributes;
 using System;
+using Dargon.Robotics.Devices.DriveTrain.Holonomic;
 
 namespace Dargon.Robotics.GamePoint.Commands {
    [InjectRequiredFields]

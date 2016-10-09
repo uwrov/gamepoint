@@ -10,6 +10,8 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Threading;
 using Dargon.Robotics.Debug;
+using Dargon.Robotics.GamePoint;
+using Microsoft.Xna.Framework.Input;
 
 namespace demo_robot_simulator {
    public class Program {
@@ -27,16 +29,16 @@ namespace demo_robot_simulator {
 //         var motors = SimulationMotorStateFactory.SkidDrive(constants.WidthMeters, constants.HeightMeters, kWheelForce);
          var motors = SimulationMotorStateFactory.HybridDrive(constants.WidthMeters, constants.HeightMeters, kMecanumWheelForceAngle, kWheelForce);
          var wheelShaftEncoders = SimulationWheelShaftEncoderStateFactory.FromMotors(motors, kWheelRadius, 128);
-         var yawGyro = new SimulationGyroscopeState("Drive.Gyroscopes.Yaw");
-         var robot = new SimulationRobotState(constants.WidthMeters, constants.HeightMeters, constants.Density, motors, wheelShaftEncoders, yawGyro);
+         var yawGyroState = new SimulationGyroscopeState("Drive.Gyroscopes.Yaw");
+         var robotState = new SimulationRobotState(constants.WidthMeters, constants.HeightMeters, constants.Density, motors, wheelShaftEncoders, yawGyroState);
 
 //         var robotEntity = new SimulationRobotEntity(constants, robot, new Vector2(0, robot.Height / 4));
 //         var robotEntity = new SimulationRobotEntity(constants, robot, new Vector2(-robot.Width / 64, robot.Height / 4), true);
-         var robotEntity = new SimulationRobotEntity(constants, robot, new Vector2(-robot.Width / 32, robot.Height / 4), 0.05f);
+         var robotEntity = new SimulationRobotEntity(constants, robotState, new Vector2(-robotState.Width / 32, robotState.Height / 4), 0.05f);
          
          // create robot state
          var deviceRegistry = new DefaultDeviceRegistry();
-         foreach (var simulationMotorState in robot.MotorStates) {
+         foreach (var simulationMotorState in robotState.MotorStates) {
             var motor = new SimulationMotorAdapter(simulationMotorState);
             motor.Initialize();
             deviceRegistry.AddDevice(motor.Name, motor);
@@ -48,10 +50,21 @@ namespace demo_robot_simulator {
             deviceRegistry.AddDevice(encoder.Name, encoder);
          }
 
-         deviceRegistry.AddDevice(yawGyro.Name, new SimulationGyroscopeAdapter(yawGyro));
+         var yawGyro = new SimulationGyroscopeAdapter(yawGyroState);
+         deviceRegistry.AddDevice(yawGyroState.Name, yawGyro);
+
+         var frontLeftIncrementalRotaryEncoder = deviceRegistry.GetDevice<IIncrementalRotaryEncoder>("Drive.Motors.FrontLeft.Encoder");
+         var frontRightIncrementalRotaryEncoder = deviceRegistry.GetDevice<IIncrementalRotaryEncoder>("Drive.Motors.FrontRight.Encoder");
+         var positionTracker = new TankDriveShaftEncodersAndYawGyroscopeBasedPositionTracker(
+            "Drive.PositionTracker", yawGyro, frontLeftIncrementalRotaryEncoder, frontRightIncrementalRotaryEncoder, 5.0f * 0.0254f);
+         positionTracker.Initialize();
+         deviceRegistry.AddDevice(positionTracker.Name, positionTracker);
 
          // Debugscene Stuff
          var debugRenderContext = new DebugRenderContext();
+
+         // simulation
+         var simulation = new Simulation2D(robotEntity, debugRenderContext);
 
          // start robot code in new thread
          new Thread(() => {
@@ -63,10 +76,20 @@ namespace demo_robot_simulator {
             }));
 
             var ryu = new RyuFactory().Create(ryuConfiguration);
-            ryu.GetOrActivate<IRobot>().Run();
+            var robot = ryu.GetOrActivate<IRobot>();
+
+            simulation.UpdateBegin += (s, e) => {
+               if (Keyboard.GetState().IsKeyDown(Keys.OemTilde)) {
+                  var dx = robotEntity.Position.X - positionTracker.Position.X;
+                  var dy = robotEntity.Position.Y - positionTracker.Position.Y;
+                  simulation.SetOffset(dx, dy);
+               }
+            };
+
+            robot.Run();
          }).Start();
 
-         new Simulation2D(robotEntity, debugRenderContext).Run();
+         simulation.Run();
       }
    }
 }

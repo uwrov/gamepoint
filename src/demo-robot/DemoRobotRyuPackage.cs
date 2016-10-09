@@ -1,8 +1,8 @@
 ﻿using Dargon.Robotics.Demo.Subsystems;
 using Dargon.Robotics.DeviceRegistries;
 using Dargon.Robotics.Devices;
-using Dargon.Robotics.Subsystems.DriveTrain.Holonomic;
-using Dargon.Robotics.Subsystems.DriveTrain.Vertical;
+using Dargon.Robotics.Devices.DriveTrain.Holonomic;
+using Dargon.Robotics.Devices.DriveTrain.Vertical;
 using Dargon.Ryu;
 using Dargon.Ryu.Modules;
 
