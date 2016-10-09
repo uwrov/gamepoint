@@ -17,6 +17,8 @@ namespace Dargon.Robotics.GamePoint.Commands {
       private readonly IGyroscope yawGyroscope;
       private readonly IPositionTracker positionTracker;
       private Vector2D destination;
+      private Vector2D destinationLineVector;
+      private int destinationReachedSign;
 
       public bool IsExecutable => true;
       public bool IsPassive => false;
@@ -25,7 +27,15 @@ namespace Dargon.Robotics.GamePoint.Commands {
       public int Subsystem => (int)SubsystemFlags.Drive;
       public void Start() {
          positionTracker.Update();
-         destination = positionTracker.Position + new Vector2D(5, 2).Rotate(Angle.FromRadians(yawGyroscope.GetAngle()));
+         var position = positionTracker.Position;
+         destination = position + new Vector2D(5, 2).Rotate(Angle.FromRadians(yawGyroscope.GetAngle()));
+         var offsetToDestination = destination - position;
+         destinationLineVector = offsetToDestination.Normalize().Rotate(Angle.FromDegrees(90));
+         destinationReachedSign = -Math.Sign(Cross2D(destinationLineVector, offsetToDestination));
+      }
+
+      private double Cross2D(Vector2D a, Vector2D b) {
+         return a.X * b.Y - a.Y * b.X;
       }
 
       public CommandStatus RunIteration() {
@@ -44,6 +54,11 @@ namespace Dargon.Robotics.GamePoint.Commands {
             Rotation = 0
          });
          var offsetToDestination = destination - positionTracker.Position;
+         if (destinationReachedSign == Math.Sign(Cross2D(destinationLineVector, offsetToDestination))) {
+            driveTrain.Halt();
+            return CommandStatus.Complete;
+         }
+
          var desiredLookat = offsetToDestination.Rotate(Angle.FromRadians(-yawGyroscope.GetAngle()));
          var desiredLookatNorm = desiredLookat.Normalize();
          var currentLookatNorm = new Vector2D(0, 1);
@@ -59,16 +74,15 @@ namespace Dargon.Robotics.GamePoint.Commands {
          var finalRatio = ratio - ratioChange;
 
          var speed = 1.0f;
-         if (gamepad.LeftShoulder) {
-            var left = (float)(speed / finalRatio);
-            var right = (float)(speed * finalRatio);
-            var max = Math.Max(left, right);
-            if (max > 1.0) {
-               left /= max;
-               right /= max;
-            }
-            driveTrain.TankDrive(left, right);
+
+         var left = (float)(speed / finalRatio);
+         var right = (float)(speed * finalRatio);
+         var max = Math.Max(left, right);
+         if (max > 1.0) {
+            left /= max;
+            right /= max;
          }
+         driveTrain.TankDrive(left, right);
          return CommandStatus.Continue;
       }
 
