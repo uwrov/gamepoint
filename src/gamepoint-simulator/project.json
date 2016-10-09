@@ -14,7 +14,6 @@
     "dependencies": {
         "Dargon.Ryu.Api": "*",
         "gamepoint": "*",
-        "Dargon.Robotics.DebugScene.Api": "*",
         "Dargon.Robotics.Simulations2D": "*"
     },
 

@@ -2,7 +2,7 @@
 using System.Threading;
 using Dargon.Commons;
 using Dargon.Robotics;
-using Dargon.Robotics.DebugScene;
+using Dargon.Robotics.Debug;
 using Dargon.Robotics.DeviceRegistries;
 using Dargon.Robotics.Devices;
 using Dargon.Robotics.Simulations2D;

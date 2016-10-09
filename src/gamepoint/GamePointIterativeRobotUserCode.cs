@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Drawing;
-using Dargon.Robotics.DebugScene;
+using Dargon.Robotics.Debug;
 using Dargon.Robotics.Devices;
 using Dargon.Robotics.RollbackLogs;
 using Dargon.Robotics.Subsystems.DriveTrain.Holonomic;

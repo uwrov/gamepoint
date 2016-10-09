@@ -1,8 +1,5 @@
-﻿using System;
-using System.Threading;
-using Dargon.Commons;
+﻿using Dargon.Commons;
 using Dargon.Robotics;
-using Dargon.Robotics.DebugScene;
 using Dargon.Robotics.DeviceRegistries;
 using Dargon.Robotics.Devices;
 using Dargon.Robotics.Simulations2D;
@@ -10,6 +7,9 @@ using Dargon.Robotics.Simulations2D.Devices;
 using Dargon.Ryu;
 using Dargon.Ryu.Modules;
 using Microsoft.Xna.Framework;
+using System;
+using System.Threading;
+using Dargon.Robotics.Debug;
 
 namespace demo_robot_simulator {
    public class Program {
@@ -33,7 +33,7 @@ namespace demo_robot_simulator {
 //         var robotEntity = new SimulationRobotEntity(constants, robot, new Vector2(0, robot.Height / 4));
 //         var robotEntity = new SimulationRobotEntity(constants, robot, new Vector2(-robot.Width / 64, robot.Height / 4), true);
          var robotEntity = new SimulationRobotEntity(constants, robot, new Vector2(-robot.Width / 32, robot.Height / 4), 0.05f);
-
+         
          // create robot state
          var deviceRegistry = new DefaultDeviceRegistry();
          foreach (var simulationMotorState in robot.MotorStates) {

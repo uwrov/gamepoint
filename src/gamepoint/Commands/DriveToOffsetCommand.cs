@@ -3,12 +3,15 @@ using Dargon.Robotics.GamePoint.Subsystems;
 using Dargon.Robotics.Subsystems.DriveTrain.Holonomic;
 using Dargon.Ryu.Attributes;
 using System;
+using System.Drawing;
+using Dargon.Robotics.Debug;
 using MathNet.Spatial.Euclidean;
 using MathNet.Spatial.Units;
 
 namespace Dargon.Robotics.GamePoint.Commands {
    [InjectRequiredFields]
    public class DriveToOffsetCommand : ICommand {
+      private readonly IDebugRenderContext debugRenderContext;
       private readonly IGamepad gamepad;
       private readonly HolonomicDriveTrain driveTrain;
       private readonly IGyroscope yawGyroscope;
@@ -28,7 +31,20 @@ namespace Dargon.Robotics.GamePoint.Commands {
       public CommandStatus RunIteration() {
          positionTracker.Update();
 
-         var desiredLookat = (destination - positionTracker.Position).Rotate(Angle.FromRadians(-yawGyroscope.GetAngle()));
+         debugRenderContext.AddQuad(new DebugSceneQuad {
+            Color = Color.Orange,
+            Extents = new Vector2D(0.25, 0.25),
+            Position = positionTracker.Position,
+            Rotation = yawGyroscope.GetAngle()
+         });
+         debugRenderContext.AddQuad(new DebugSceneQuad {
+            Color = Color.Red,
+            Extents = new Vector2D(0.25, 0.25),
+            Position = destination,
+            Rotation = 0
+         });
+         var offsetToDestination = destination - positionTracker.Position;
+         var desiredLookat = offsetToDestination.Rotate(Angle.FromRadians(-yawGyroscope.GetAngle()));
          var desiredLookatNorm = desiredLookat.Normalize();
          var currentLookatNorm = new Vector2D(0, 1);
 

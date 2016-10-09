@@ -93,35 +93,14 @@
           "NLog": "4.3.9"
         },
         "frameworkAssemblies": [
-          "System.Xml"
-        ],
-        "compile": {
-          "net461/Dargon.Robotics.dll": {}
-        },
-        "runtime": {
-          "net461/Dargon.Robotics.dll": {}
-        }
-      },
-      "Dargon.Robotics.DebugScene.Api/1.0.0": {
-        "type": "project",
-        "framework": ".NETFramework,Version=v4.6.1",
-        "dependencies": {
-          "Dargon.Commons": "1.0.0",
-          "Dargon.Ryu.Api": "1.0.0",
-          "Dargon.Ryu.Impl": "1.0.0",
-          "MathNet.Numerics": "3.13.1",
-          "MathNet.Spatial": "0.2.0-alpha",
-          "NLog": "4.3.9"
-        },
-        "frameworkAssemblies": [
           "System.Drawing",
           "System.Xml"
         ],
         "compile": {
-          "net461/Dargon.Robotics.DebugScene.Api.dll": {}
+          "net461/Dargon.Robotics.dll": {}
         },
         "runtime": {
-          "net461/Dargon.Robotics.DebugScene.Api.dll": {}
+          "net461/Dargon.Robotics.dll": {}
         }
       },
       "Dargon.Robotics.Simulations2D/1.0.0": {
@@ -130,7 +109,6 @@
         "dependencies": {
           "Dargon.Commons": "1.0.0",
           "Dargon.Robotics": "1.0.0",
-          "Dargon.Robotics.DebugScene.Api": "1.0.0",
           "FarseerPhysics.Portable": "3.5.1",
           "MonoGame.Framework.DesktopGL": "3.5.1.1679"
         },
@@ -174,7 +152,6 @@
         "framework": ".NETFramework,Version=v4.6.1",
         "dependencies": {
           "Dargon.Robotics": "1.0.0",
-          "Dargon.Robotics.DebugScene.Api": "1.0.0",
           "Dargon.Ryu.Api": "1.0.0"
         },
         "frameworkAssemblies": [
@@ -312,11 +289,6 @@
       "path": "../../dependencies/robotics/src/Dargon.Robotics/project.json",
       "msbuildProject": "../../dependencies/robotics/src/Dargon.Robotics/Dargon.Robotics.xproj"
     },
-    "Dargon.Robotics.DebugScene.Api/1.0.0": {
-      "type": "project",
-      "path": "../../dependencies/robotics/src/Dargon.Robotics.DebugScene.Api/project.json",
-      "msbuildProject": "../../dependencies/robotics/src/Dargon.Robotics.DebugScene.Api/Dargon.Robotics.DebugScene.Api.xproj"
-    },
     "Dargon.Robotics.Simulations2D/1.0.0": {
       "type": "project",
       "path": "../../dependencies/robotics/src/Dargon.Robotics.Simulations2D/project.json",
@@ -340,7 +312,6 @@
   },
   "projectFileDependencyGroups": {
     "": [
-      "Dargon.Robotics.DebugScene.Api",
       "Dargon.Robotics.Simulations2D",
       "Dargon.Ryu.Api",
       "gamepoint"
