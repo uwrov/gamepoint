@@ -6,7 +6,7 @@ using Dargon.Ryu;
 using Dargon.Ryu.Modules;
 using System;
 using System.Collections.Generic;
-using Dargon.Robotics.Debug;
+using Dargon.Robotics.Debugging;
 using Dargon.Robotics.GamePoint.Commands;
 
 namespace Dargon.Robotics.GamePoint {

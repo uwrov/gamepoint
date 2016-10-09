@@ -9,7 +9,7 @@ using Dargon.Ryu.Modules;
 using Microsoft.Xna.Framework;
 using System;
 using System.Threading;
-using Dargon.Robotics.Debug;
+using Dargon.Robotics.Debugging;
 
 namespace demo_robot_simulator {
    public class Program {
