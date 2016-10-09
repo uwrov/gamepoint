@@ -152,7 +152,6 @@
         "framework": ".NETFramework,Version=v4.6.1",
         "dependencies": {
           "Dargon.Robotics": "1.0.0",
-          "Dargon.Robotics.DebugScene.Api": "1.0.0",
           "Dargon.Ryu.Api": "1.0.0"
         },
         "frameworkAssemblies": [
@@ -313,7 +312,6 @@
   },
   "projectFileDependencyGroups": {
     "": [
-      "Dargon.Robotics.DebugScene.Api",
       "Dargon.Robotics.Simulations2D",
       "Dargon.Ryu.Api",
       "gamepoint"

@@ -220,7 +220,6 @@
   "projectFileDependencyGroups": {
     "": [
       "Dargon.Robotics",
-      "Dargon.Robotics.DebugScene.Api",
       "Dargon.Ryu.Api"
     ],
     ".NETFramework,Version=v4.6.1": [

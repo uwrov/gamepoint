@@ -14,8 +14,7 @@
 
     "dependencies": {
         "Dargon.Ryu.Api": "*",
-        "Dargon.Robotics": "*",
-        "Dargon.Robotics.DebugScene.Api": "*"
+        "Dargon.Robotics": "*"
     },
 
     "compilationOptions": {
