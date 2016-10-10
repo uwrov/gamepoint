@@ -35,12 +35,13 @@ namespace Dargon.Robotics.GamePoint.Commands {
       public CommandStatus RunIteration() {
          float currentAngle = yawGyroscope.GetAngle();
          float angularDistance = currentAngle - destAngle;
-         if (currentAngle > destAngle - 0.1 && currentAngle < destAngle + 0.1) {
+         if (currentAngle > destAngle - 0.01 && currentAngle < destAngle + 0.01) {
             driveTrain.SetValues(0.0f, 0.0f, 0.0f, 0.0f);
             return CommandStatus.Complete;
          }
-         
-         driveTrain.SetValues(0.5f, -0.5f, 0.5f, -0.5f);
+
+         float scaledSpeed = angularDistance / (float)Math.PI;
+         driveTrain.SetValues(scaledSpeed, -scaledSpeed, scaledSpeed, -scaledSpeed);
          return CommandStatus.Continue;
       }
 
