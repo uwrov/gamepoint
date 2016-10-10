@@ -9,6 +9,7 @@ using Dargon.Ryu.Modules;
 using Microsoft.Xna.Framework;
 using System;
 using System.Threading;
+using Dargon.Commons.Collections;
 using Dargon.Robotics.Debugging;
 
 namespace demo_robot_simulator {
@@ -66,7 +67,10 @@ namespace demo_robot_simulator {
             ryu.GetOrActivate<IRobot>().Run();
          }).Start();
 
-         new Simulation2D(robotEntity, debugRenderContext).Run();
+         var entities = new ConcurrentSet<ISimulationEntity>();
+         entities.AddOrThrow(robotEntity);
+         entities.AddOrThrow(new SimulationBallEntity(new SimulationBallConstants() {Radius = .5f, Density = 10.0f, LinearDamping = 1.0f}));
+         new Simulation2D(entities, debugRenderContext).Run();
       }
    }
 }

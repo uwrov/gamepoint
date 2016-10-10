@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using Dargon.Commons;
+using Dargon.Commons.Collections;
 using Dargon.Robotics;
 using Dargon.Robotics.Debugging;
 using Dargon.Robotics.DeviceRegistries;
@@ -59,7 +60,9 @@ namespace demo_robot_simulator {
             ryu.GetOrActivate<IRobot>().Run();
          }).Start();
 
-         new Simulation2D(robotEntity, debugRenderContext).Run();
+         var entities = new ConcurrentSet<ISimulationEntity>();
+         entities.AddOrThrow(robotEntity);
+         new Simulation2D(entities, debugRenderContext).Run();
       }
    }
 }
