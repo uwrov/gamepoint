@@ -11,6 +11,8 @@ using System;
 using System.Threading;
 using Dargon.Commons.Collections;
 using Dargon.Robotics.Debugging;
+using FarseerPhysics;
+using Microsoft.Xna.Framework.Input;
 
 namespace demo_robot_simulator {
    public class Program {
@@ -33,7 +35,7 @@ namespace demo_robot_simulator {
 
 //         var robotEntity = new SimulationRobotEntity(constants, robot, new Vector2(0, robot.Height / 4));
 //         var robotEntity = new SimulationRobotEntity(constants, robot, new Vector2(-robot.Width / 64, robot.Height / 4), true);
-         var robotEntity = new SimulationRobotEntity(constants, robot, new Vector2(-robot.Width / 32, robot.Height / 4), 0.05f);
+         var robotEntity = new SimulationRobotEntity(constants, robot, default(Vector2), new Vector2(1,1), 0.05f);
          
          // create robot state
          var deviceRegistry = new DefaultDeviceRegistry();
@@ -69,8 +71,32 @@ namespace demo_robot_simulator {
 
          var entities = new ConcurrentSet<ISimulationEntity>();
          entities.AddOrThrow(robotEntity);
-         entities.AddOrThrow(new SimulationBallEntity(new SimulationBallConstants() {Radius = .5f, Density = 10.0f, LinearDamping = 1.0f}));
-         new Simulation2D(entities, debugRenderContext).Run();
+         entities.AddOrThrow(new SimulationBallEntity(new SimulationBallConstants() {Radius = .25f, Density = 10.0f, LinearDamping = 1.0f}, initialPosition:new Vector2(2,2)));
+         new GamepointSimulation2D(entities, debugRenderContext).Run();
+      }
+
+      class GamepointSimulation2D : Simulation2D {
+         private readonly Random random = new Random();
+         private KeyboardState previousKeyboardState;
+
+         public GamepointSimulation2D(ConcurrentSet<ISimulationEntity> entities, IDebugRenderContext debugRenderContext) : base(entities, debugRenderContext) {
+            previousKeyboardState = Keyboard.GetState();
+         }
+
+         protected override void Update(GameTime gameTime) {
+            base.Update(gameTime);
+            var keyboardState = Keyboard.GetState();
+            if (keyboardState.IsKeyDown(Keys.D1) && !previousKeyboardState.IsKeyDown(Keys.D1)) {
+               var cursorPosition = Mouse.GetState(Window).Position;
+
+               var ballLocation = ConvertDisplayPointToSimulatorVector(cursorPosition);
+               ballLocation.X += ((float)random.NextDouble() - 0.5f) / 10000f;
+               ballLocation.Y += ((float)random.NextDouble() - 0.5f) / 10000f;
+               
+               AddEntity(new SimulationBallEntity(new SimulationBallConstants{ Radius = .25f, Density = 10.0f, LinearDamping = 1.0f }, initialPosition: ballLocation));
+            }
+            previousKeyboardState = keyboardState;
+         }
       }
    }
 }
