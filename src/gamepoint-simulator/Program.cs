@@ -23,6 +23,7 @@ namespace demo_robot_simulator {
       private const float kMetersPerInch = 0.0254f;
       private const float kWheelRadius = 5 * kMetersPerInch;
       private const float kWheelForce = kMotorTorque / kWheelRadius;
+      private static Simulation2D simulation2D;
 
       public static void Main(string[] args) {
          // create simulation state
@@ -72,7 +73,8 @@ namespace demo_robot_simulator {
          var entities = new ConcurrentSet<ISimulationEntity>();
          entities.AddOrThrow(robotEntity);
          entities.AddOrThrow(new SimulationBallEntity(new SimulationBallConstants() {Radius = .25f, Density = 10.0f, LinearDamping = 1.0f}, initialPosition:new Vector2(2,2)));
-         new GamepointSimulation2D(entities, debugRenderContext).Run();
+         simulation2D = new GamepointSimulation2D(entities, debugRenderContext);
+         simulation2D.Run();
       }
 
       class GamepointSimulation2D : Simulation2D {
