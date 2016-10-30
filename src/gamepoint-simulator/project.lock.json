@@ -312,6 +312,7 @@
   },
   "projectFileDependencyGroups": {
     "": [
+      "Dargon.Robotics",
       "Dargon.Robotics.Simulations2D",
       "Dargon.Ryu.Api",
       "gamepoint"
