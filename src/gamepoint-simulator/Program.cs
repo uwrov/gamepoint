@@ -8,6 +8,7 @@ using Dargon.Ryu;
 using Dargon.Ryu.Modules;
 using Microsoft.Xna.Framework;
 using System;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Threading;
 using Dargon.Commons.Collections;
 using Dargon.Robotics.Debugging;
@@ -80,9 +81,15 @@ namespace demo_robot_simulator {
       class GamepointSimulation2D : Simulation2D {
          private readonly Random random = new Random();
          private KeyboardState previousKeyboardState;
+         private readonly SimulationRobotEntity robotEntity;
 
          public GamepointSimulation2D(ConcurrentSet<ISimulationEntity> entities, IDebugRenderContext debugRenderContext) : base(entities, debugRenderContext) {
             previousKeyboardState = Keyboard.GetState();
+            foreach (var entity in entities) {
+               if (entity is SimulationRobotEntity) {
+                  this.robotEntity = (SimulationRobotEntity)entity;
+               }
+            }
          }
 
          protected override void Update(GameTime gameTime) {
@@ -96,6 +103,12 @@ namespace demo_robot_simulator {
                ballLocation.Y += ((float)random.NextDouble() - 0.5f) / 10000f;
                
                AddEntity(new SimulationBallEntity(new SimulationBallConstants{ Radius = .25f, Density = 10.0f, LinearDamping = 1.0f }, initialPosition: ballLocation));
+            }
+            if (keyboardState.IsKeyDown(Keys.Left) && robotEntity.TurretRotation < Math.PI / 4) {
+               robotEntity.TurretRotation += .03f;
+            }
+            if (keyboardState.IsKeyDown(Keys.Right) && robotEntity.TurretRotation > Math.PI / -4) {
+               robotEntity.TurretRotation -= .03f;
             }
             previousKeyboardState = keyboardState;
          }
